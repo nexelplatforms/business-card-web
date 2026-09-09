@@ -9,12 +9,8 @@ import api from '@/lib/api';
  * OAuth Callback Page
  *
  * Better Auth redirects here after a successful Google OAuth flow.
- * The session cookie is set automatically by Better Auth.
- * We fetch the current user from /auth/me and store it in localStorage
- * to match the existing email/password session pattern.
- *
- * If the backend passes ?token=<jwt>&user=<json> (custom flow), we handle
- * that too for forward compatibility.
+ * If the backend passes ?token=<jwt>&user=<json>, we store it into localStorage
+ * and navigate directly to /dashboard.
  */
 function CallbackHandler() {
   const router = useRouter();
@@ -29,45 +25,39 @@ function CallbackHandler() {
       return;
     }
 
-    // Case 1: Custom backend passes token + user directly in query params
+    // Case 1: Backend passes token (+ user optional) directly in query params
     const token = searchParams.get('token');
     const userParam = searchParams.get('user');
 
-    if (token && userParam) {
+    if (token) {
       try {
-        const user = JSON.parse(decodeURIComponent(userParam));
         localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        if (userParam) {
+          try {
+            const user = JSON.parse(decodeURIComponent(userParam));
+            localStorage.setItem('user', JSON.stringify(user));
+          } catch (pe) {
+            console.warn('Could not parse user param:', pe);
+          }
+        }
         window.dispatchEvent(new Event('auth-change'));
         const redirectTarget = searchParams.get('redirect') || '/dashboard';
         router.replace(redirectTarget);
       } catch (e) {
-        console.error('Failed to parse user from callback:', e);
+        console.error('Failed to store OAuth callback session:', e);
         router.replace('/login?error=oauth_failed');
       }
       return;
     }
 
-    // Case 2: Better Auth session cookie flow — fetch the session
+    // Case 2: Cookie-based / fallback session fetch
     const fetchSession = async () => {
       try {
-        // We use the api client which has withCredentials enabled
-        const response = await api.get('/auth/me');
-        const { user } = response.data;
+        const response = await api.get('/profile');
+        const user = response.data?.data || response.data;
 
         if (user) {
           localStorage.setItem('user', JSON.stringify(user));
-          
-          // Try to see if we can get a JWT token from the session for non-cookie components
-          try {
-            const tokenRes = await api.get('/auth/token');
-            if (tokenRes.data?.token) {
-               localStorage.setItem('token', tokenRes.data.token);
-            }
-          } catch (e) {
-            // Silently ignore if token endpoint doesn't exist
-          }
-
           window.dispatchEvent(new Event('auth-change'));
           router.replace('/dashboard');
         } else {
