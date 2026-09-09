@@ -42,6 +42,7 @@ interface InviteData {
   eventType?: string;
   inviterName: string;
   inviterAvatar?: string;
+  hasAccount?: boolean;
 }
 
 interface Props {
@@ -366,28 +367,55 @@ export default function InviteClientView({ token, initialInvite }: Props) {
           ) : !isAuthLoading && !isAuthenticated ? (
             /* 2. Unauthenticated State (Step 1.0 & 1 of diagram) */
             <div className="space-y-3">
-              <div className="rounded-xl p-3.5 bg-muted/70 border border-border text-xs text-muted-foreground text-center">
-                <p className="leading-relaxed">
-                  This invite was sent to <strong className="text-foreground break-all">{invite.invitedEmail}</strong>.
-                </p>
-                <p className="mt-0.5">Please log in or create an account to join the team.</p>
-              </div>
+              {invite.hasAccount === false ? (
+                /* 2A. User has NO account in DB -> Show Create Account directly */
+                <>
+                  <div className="rounded-xl p-3.5 bg-muted/70 border border-border text-xs text-muted-foreground text-center">
+                    <p className="leading-relaxed">
+                      This invite was sent to <strong className="text-foreground break-all">{invite.invitedEmail}</strong>.
+                    </p>
+                    <p className="mt-0.5 font-medium text-foreground">Create a free account to join the team.</p>
+                  </div>
 
-              <div className="grid grid-cols-2 gap-2.5">
-                <Button size="lg" className="rounded-xl min-h-[3rem] h-auto py-3 text-sm font-semibold" asChild>
-                  <Link href={loginRedirectUrl} className="flex items-center justify-center gap-1.5">
-                    <LogIn className="w-4 h-4 shrink-0" />
-                    <span>Log In</span>
-                  </Link>
-                </Button>
+                  <Button size="lg" className="w-full rounded-xl min-h-[3rem] h-auto py-3 text-sm font-semibold btn-primary-glow" asChild>
+                    <Link href={signupRedirectUrl} className="flex items-center justify-center gap-1.5">
+                      <UserPlus className="w-4 h-4 shrink-0" />
+                      <span>Create Account</span>
+                    </Link>
+                  </Button>
 
-                <Button size="lg" variant="outline" className="rounded-xl min-h-[3rem] h-auto py-3 text-sm font-semibold" asChild>
-                  <Link href={signupRedirectUrl} className="flex items-center justify-center gap-1.5">
-                    <UserPlus className="w-4 h-4 shrink-0" />
-                    <span>Create Account</span>
-                  </Link>
-                </Button>
-              </div>
+                  <div className="text-center text-xs text-muted-foreground pt-1">
+                    Already have an account under a different email?{" "}
+                    <Link href={loginRedirectUrl} className="font-semibold text-primary hover:underline">
+                      Log In
+                    </Link>
+                  </div>
+                </>
+              ) : (
+                /* 2B. User HAS an account in DB -> Show Log In as primary */
+                <>
+                  <div className="rounded-xl p-3.5 bg-muted/70 border border-border text-xs text-muted-foreground text-center">
+                    <p className="leading-relaxed">
+                      This invite was sent to <strong className="text-foreground break-all">{invite.invitedEmail}</strong>.
+                    </p>
+                    <p className="mt-0.5">Please log in to accept this invitation.</p>
+                  </div>
+
+                  <Button size="lg" className="w-full rounded-xl min-h-[3rem] h-auto py-3 text-sm font-semibold btn-primary-glow" asChild>
+                    <Link href={loginRedirectUrl} className="flex items-center justify-center gap-1.5">
+                      <LogIn className="w-4 h-4 shrink-0" />
+                      <span>Log In</span>
+                    </Link>
+                  </Button>
+
+                  <div className="text-center text-xs text-muted-foreground pt-1">
+                    Don&apos;t have an account?{" "}
+                    <Link href={signupRedirectUrl} className="font-semibold text-primary hover:underline">
+                      Create Account
+                    </Link>
+                  </div>
+                </>
+              )}
 
               <Button
                 size="lg"

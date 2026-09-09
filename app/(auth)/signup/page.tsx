@@ -44,11 +44,16 @@ function SignupForm() {
   const [googleLoading, setGoogleLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const defaultEmail = searchParams.get('email') || '';
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<SignupFormValues>({
+    defaultValues: {
+      email: defaultEmail,
+    },
     resolver: zodResolver(signupSchema),
   });
 

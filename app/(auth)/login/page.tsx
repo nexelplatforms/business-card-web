@@ -48,11 +48,16 @@ function LoginForm() {
     }
   }, [searchParams]);
 
+  const defaultEmail = searchParams.get('email') || '';
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormValues>({
+    defaultValues: {
+      email: defaultEmail,
+    },
     resolver: zodResolver(loginSchema),
   });
 
