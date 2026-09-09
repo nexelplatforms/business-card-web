@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -37,7 +37,7 @@ const signupSchema = z
 
 type SignupFormValues = z.infer<typeof signupSchema>;
 
-export default function SignupPage() {
+function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -314,5 +314,14 @@ export default function SignupPage() {
       </div>
 
     </div>
+  );
+}
+
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+      <SignupForm />
+    </Suspense>
   );
 }

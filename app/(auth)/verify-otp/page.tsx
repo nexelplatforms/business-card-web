@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -29,7 +29,7 @@ type OTPFormValues = z.infer<typeof otpSchema>;
 const SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutes
 const MAX_ATTEMPTS = 5;
 
-export default function VerifyOTPPage() {
+function VerifyOTPForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -301,5 +301,14 @@ export default function VerifyOTPPage() {
 
       </div>
     </div>
+  );
+}
+
+
+export default function VerifyOTPPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>}>
+      <VerifyOTPForm />
+    </Suspense>
   );
 }
