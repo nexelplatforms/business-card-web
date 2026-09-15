@@ -324,7 +324,7 @@ export default function Home() {
               <span className="text-foreground font-bold uppercase tracking-wider text-[11px]">Support</span>
               <Link href="/help" className="hover:text-foreground transition-colors">Help Center</Link>
               <Link href="/feedback" className="hover:text-foreground transition-colors">Product Feedback</Link>
-              <a href="mailto:support@lukewarm.app" className="hover:text-foreground transition-colors">support@lukewarm.app</a>
+              <a href={`mailto:${process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@lukewarm.app"}`} className="hover:text-foreground transition-colors">{process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@lukewarm.app"}</a>
             </div>
 
             <div className="flex flex-col gap-2">
