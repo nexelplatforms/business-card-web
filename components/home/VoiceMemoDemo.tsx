@@ -9,8 +9,7 @@ import {
   Clock, 
   CheckCircle2, 
   FileText,
-  ArrowRight,
-  Sparkles
+  ArrowRight
 } from 'lucide-react';
 
 export function VoiceMemoDemo() {

@@ -14,7 +14,6 @@ import {
   Globe,
   Calendar,
   CreditCard,
-  Sparkles,
   Edit3,
   Instagram,
   Linkedin,

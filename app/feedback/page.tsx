@@ -8,7 +8,6 @@ import {
   Send, 
   CheckCircle2, 
   Star, 
-  Sparkles,
   Lightbulb,
   Camera,
   Bug,

@@ -13,7 +13,6 @@ import {
   ChevronDown,
   ChevronUp,
   Mail,
-  Sparkles,
   Phone,
   MessageSquareQuote,
   ShieldCheck,

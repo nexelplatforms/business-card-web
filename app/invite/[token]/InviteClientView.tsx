@@ -6,7 +6,6 @@ import {
   Calendar, 
   MapPin, 
   Users, 
-  Sparkles, 
   ArrowRight, 
   Copy, 
   Check, 
@@ -319,7 +318,7 @@ export default function InviteClientView({ token, initialInvite }: Props) {
 
           {/* Live Lead Sync Notice */}
           <div className="rounded-xl p-3.5 mb-6 bg-muted/60 border border-border flex items-start gap-2.5 text-xs text-muted-foreground">
-            <Sparkles className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+            <Users className="w-4 h-4 text-primary shrink-0 mt-0.5" />
             <p className="leading-relaxed">
               <strong className="text-foreground">Shared Team Leads:</strong> Cards scanned at this event automatically sync to the team in real-time with scanner attribution.
             </p>
