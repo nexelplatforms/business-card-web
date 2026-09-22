@@ -1,3 +1,6 @@
+> [!WARNING]  
+> **ARCHIVED**: This repository has been moved into the Lukewarm monorepo (under `apps/dashboard`). All future development will happen there. This standalone repository is kept for historical purposes only and will no longer be updated.
+
 # CRM Next (Web)
 
 A modern web dashboard for the Lukewarm system, built with Next.js 15 (React 19).
